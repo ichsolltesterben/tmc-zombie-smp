@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -41,6 +42,11 @@ public class WorldControlListener implements Listener {
                 block.getWorld().dropItem(block.getLocation(), new ItemStack(Material.WEB));
             }
         } catch (Exception ignored) { /* Weird NPEs are being thrown here on occasion. */ }
+    }
+
+    @EventHandler
+    public void preventLandDestructionOnExplode(EntityExplodeEvent event) {
+        event.blockList().clear();
     }
 
     @EventHandler

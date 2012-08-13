@@ -13,6 +13,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class PlayerListener implements Listener {
 
@@ -41,6 +42,15 @@ public class PlayerListener implements Listener {
         Location location = player.getLocation();
         Entity zombie = player.getWorld().spawnEntity(location, EntityType.ZOMBIE);
         PlayerZombiesSingleton.getInstance().savePlayerZombie(zombie, player.getInventory());
+    }
+
+    @EventHandler
+    public void preventTeleportAndTurnEnderPearlsIntoGrenades(PlayerTeleportEvent event) {
+        if (event.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL) {
+            event.setCancelled(true);
+            Location toExplode = event.getTo();
+            event.getPlayer().getWorld().createExplosion(toExplode, 5f);
+        }
     }
 
     @EventHandler
