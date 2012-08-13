@@ -8,6 +8,7 @@ import org.bukkit.block.Block;
 
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Map;
 
 public class BlockPlaceSchedule {
 
@@ -31,12 +32,11 @@ public class BlockPlaceSchedule {
 
     private static void cleanUpBlocks(Material material, int timeSpan) {
         Date date = new Date();
-        for (Iterator it = BlockPlaceSingleton.getList(material).iterator(); it.hasNext();) {
-            // remove buttons that are older than 10 seconds
-            BlockPlaceBean toRemove = (BlockPlaceBean) it.next();
+        for (Map.Entry<String, BlockPlaceBean> block : BlockPlaceSingleton.getList(material).entrySet()) {
+            BlockPlaceBean toRemove = block.getValue();
             if (date.getTime() - toRemove.getPlacedDate().getTime() > timeSpan) {
+                BlockPlaceSingleton.remove(toRemove.getBlock());
                 removeBlock(toRemove);
-                it.remove();
             }
         }
     }

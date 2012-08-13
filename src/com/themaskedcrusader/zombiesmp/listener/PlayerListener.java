@@ -49,7 +49,7 @@ public class PlayerListener implements Listener {
         if (event.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL) {
             event.setCancelled(true);
             Location toExplode = event.getTo();
-            event.getPlayer().getWorld().createExplosion(toExplode, 5f);
+            event.getPlayer().getWorld().createExplosion(toExplode, 3f);
         }
     }
 
