@@ -40,7 +40,7 @@ public class WorldControlListener implements Listener {
                 BlockPlaceSingleton.removeIfApplicable(block);
                 block.getWorld().dropItem(block.getLocation(), new ItemStack(Material.WEB));
             }
-        } catch (Exception ignored) { /* Weird NPE being thrown on occasion. */ }
+        } catch (Exception ignored) { /* Weird NPEs are being thrown here on occasion. */ }
     }
 
     @EventHandler

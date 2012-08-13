@@ -51,44 +51,28 @@ public class BlockPlaceSingleton {
         }
     }
 
-    public static boolean isBlockInList(Block block) {
-        ArrayList<BlockPlaceBean> list;
-        switch(block.getType()) {
-            case STONE_BUTTON: list = buttons;  break;
-            case        TORCH: list = torches;  break;
-            case          WEB: list = webs;     break;
-            case  MELON_BLOCK: list = melons;   break;
-            default: return false;
-        }
-
-        for (BlockPlaceBean bean : list) {
-            if (bean.getBlock().getLocation().getBlockX() == block.getLocation().getBlockX() &&
-                    bean.getBlock().getLocation().getBlockY() == block.getLocation().getBlockY() &&
-                    bean.getBlock().getLocation().getBlockZ() == block.getLocation().getBlockZ()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static void removeIfApplicable(Block block) {
-        ArrayList<BlockPlaceBean> list;
-        switch(block.getType()) {
-            case STONE_BUTTON: list = buttons;  break;
-            case        TORCH: list = torches;  break;
-            case          WEB: list = webs;     break;
-            case  MELON_BLOCK: list = melons;   break;
-            default: return;
-        }
+    private static boolean isBlockInListOrRemove(Block block, boolean remove) {
+        ArrayList<BlockPlaceBean> list = getList(block.getType());
 
         for (Iterator it = list.iterator() ; it.hasNext() ; ) {
             BlockPlaceBean bean = (BlockPlaceBean) it.next();
             if (bean.getBlock().getLocation().getBlockX() == block.getLocation().getBlockX() &&
                     bean.getBlock().getLocation().getBlockY() == block.getLocation().getBlockY() &&
                     bean.getBlock().getLocation().getBlockZ() == block.getLocation().getBlockZ()) {
-                it.remove();
-                return;
+                if (remove) {
+                    it.remove();
+                }
+                return true;
             }
         }
+        return false;
+    }
+
+    public static boolean isBlockInList(Block block) {
+        return isBlockInListOrRemove(block, false);
+    }
+
+    public static void removeIfApplicable(Block block) {
+        isBlockInListOrRemove(block, true);
     }
 }

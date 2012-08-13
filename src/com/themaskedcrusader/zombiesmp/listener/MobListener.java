@@ -26,11 +26,14 @@ public class MobListener implements Listener {
     public void preventMobSpawningExceptZombie(CreatureSpawnEvent event) {
         ZombieSpawnUtility utility = new ZombieSpawnUtility();
         Entity entity = event.getEntity();
-        if (entity.getType() == EntityType.ZOMBIE) {
-            if (!plugin.isCurrentlySpawning()) {
+        if (!plugin.isCurrentlySpawning()) {
+            if (entity.getType() == EntityType.ZOMBIE && utility.canSpawnZombies(entity)) {
                 utility.spawnZombies(plugin, entity);
+                event.setCancelled(true);
+            } else {
+                event.setCancelled(true);
             }
-        } else {
+        } else if (entity.getType() != EntityType.ZOMBIE ) {
             event.setCancelled(true);
         }
     }

@@ -42,9 +42,8 @@ public class BlockPlaceSchedule {
     }
 
     private static void removeBlock(BlockPlaceBean toRemove) {
-        Block block = toRemove.getBlock();
-        Block _toRemove = block.getWorld().getBlockAt(block.getLocation());
-        _toRemove.setType(Material.AIR);
+        Block block = toRemove.getBlock().getWorld().getBlockAt(toRemove.getBlock().getLocation());
+        block.setType(Material.AIR);
     }
 
     // force cleanup on command on unload;

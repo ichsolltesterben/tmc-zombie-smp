@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 public class BlockBreakUtility {
 
+    // todo: prevent break of map buttons
     public static boolean canBreakBlock(Block block, Player player) {
         switch(block.getType()) {
             case STONE_BUTTON : block.setType(Material.AIR); return true;

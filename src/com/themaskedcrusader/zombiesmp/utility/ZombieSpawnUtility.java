@@ -5,26 +5,29 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ZombieSpawnUtility {
 
+    public boolean canSpawnZombies(Entity entity) {
+        List nearbyZombies = removeNonZombies(entity.getNearbyEntities(40, 40, 40));
+        return (nearbyZombies.size() < 10);
+    }
+
     public void spawnZombies(ZombieSmpPlugin plugin, Entity entity) {
-        List nearbyZombies = removeNonZombies(entity.getNearbyEntities(25, 25, 25));
-        if (nearbyZombies.size() < 10) {
-            int toSpawn = howManyZombiesToSpawn();
-            plugin.setCurrentlySpawning(true);
-            for(int i = 0 ; i < toSpawn ; i++) {
-                World world = entity.getWorld();
-                Location location = entity.getLocation();
-                // choose a location within 3 blocks of the chosen location, so that multiple spawns are not in the same location
-                Location vector = new Location(world, Math.random() * 3, Math.random() * 3, Math.random() * 3 );
-                entity.getWorld().spawnEntity(location.add(vector), EntityType.ZOMBIE);
-            }
-            plugin.setCurrentlySpawning(false);
+        int toSpawn = howManyZombiesToSpawn();
+        plugin.setCurrentlySpawning(true);
+        for(int i = 0 ; i < toSpawn ; i++) {
+            World world = entity.getWorld();
+            Location location = entity.getLocation();
+            // choose a location within 3 blocks of the chosen location, so that multiple spawns are not in the same location
+            Location vector = new Location(world, Math.random() * 3, Math.random() * 3, Math.random() * 3 );
+            entity.getWorld().spawnEntity(location.add(vector), EntityType.ZOMBIE);
         }
+        plugin.setCurrentlySpawning(false);
     }
 
     private int howManyZombiesToSpawn() {
