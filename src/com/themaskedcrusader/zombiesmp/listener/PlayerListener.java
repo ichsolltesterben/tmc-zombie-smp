@@ -1,6 +1,7 @@
 package com.themaskedcrusader.zombiesmp.listener;
 
 import com.themaskedcrusader.zombiesmp.ZombieSmpPlugin;
+import com.themaskedcrusader.zombiesmp.singleton.PlayerZombiesSingleton;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -35,18 +36,18 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void spawnZombieOnPlayerDeath(PlayerDeathEvent event) {
-        Entity entity = event.getEntity();
-        if (entity instanceof Player) {
-            Location location = entity.getLocation();
-            entity.getWorld().spawnEntity(location, EntityType.ZOMBIE);
-        }
+        Player player = event.getEntity();
+        event.getDrops().clear();
+        Location location = player.getLocation();
+        Entity zombie = player.getWorld().spawnEntity(location, EntityType.ZOMBIE);
+        PlayerZombiesSingleton.getInstance().savePlayerZombie(zombie, player.getInventory());
     }
 
     @EventHandler
     public void opIsInvincible(EntityDamageEvent event) {
-        Entity entity = event.getEntity();
-        if (entity instanceof Player) {
-            event.setCancelled(((Player) entity).isOp());
-        }
+//        Entity entity = event.getEntity();
+//        if (entity instanceof Player) {
+//            event.setCancelled(((Player) entity).isOp());
+//        }
     }
 }

@@ -25,7 +25,7 @@ public class BlockPlaceSchedule {
         cleanUpBlocks(Material.STONE_BUTTON, 60000); // 60 seconds
         cleanUpBlocks(Material.TORCH, 300000);       //  5 minutes
         cleanUpBlocks(Material.WEB, 600000);         // 10 minutes
-        cleanUpBlocks(Material.MELON, 60000);        // 60 seconds
+        cleanUpBlocks(Material.MELON_BLOCK, 60000);  // 60 seconds
     }
 
 
@@ -52,6 +52,6 @@ public class BlockPlaceSchedule {
         cleanUpBlocks(Material.STONE_BUTTON, 0);
         cleanUpBlocks(Material.TORCH, 0);
         cleanUpBlocks(Material.WEB, 0);
-        cleanUpBlocks(Material.MELON, 0);
+        cleanUpBlocks(Material.MELON_BLOCK, 0);
     }
 }

@@ -1,6 +1,7 @@
 package com.themaskedcrusader.zombiesmp.listener;
 
 import com.themaskedcrusader.zombiesmp.ZombieSmpPlugin;
+import com.themaskedcrusader.zombiesmp.singleton.PlayerZombiesSingleton;
 import com.themaskedcrusader.zombiesmp.utility.ZombieSpawnUtility;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -8,6 +9,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
 
 @SuppressWarnings("unused")
 public class MobListener implements Listener {
@@ -41,6 +45,18 @@ public class MobListener implements Listener {
         }
     }
 
+    @EventHandler
+    public void onZombieDeath(EntityDeathEvent event) {
+        if (event.getEntity().getType() == EntityType.ZOMBIE) {
+            Entity entity = event.getEntity();
+            ArrayList<ItemStack> inv = PlayerZombiesSingleton.getInstance().getZombieInventory(entity.getEntityId());
+            if (inv != null) {
+                event.getDrops().addAll(inv);
+                PlayerZombiesSingleton.removeZombie(entity.getEntityId());
+            }
+        }
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void cancelZombieFire(EntityCombustEvent event) {
         EntityType et = event.getEntityType();
@@ -57,7 +73,4 @@ public class MobListener implements Listener {
         event.setCancelled(false);
     }
 
-    public void preventExperienceOnDeath(EntityDeathEvent event) {
-
-    }
 }
