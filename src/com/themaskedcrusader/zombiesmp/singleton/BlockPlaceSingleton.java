@@ -4,7 +4,9 @@ import com.themaskedcrusader.zombiesmp.beans.BlockPlaceBean;
 import com.themaskedcrusader.zombiesmp.utility.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +18,7 @@ public class BlockPlaceSingleton {
     static HashMap<String, BlockPlaceBean> torches = new HashMap<String, BlockPlaceBean>();
     static HashMap<String, BlockPlaceBean> webs = new HashMap<String, BlockPlaceBean>();
     static HashMap<String, BlockPlaceBean> melons = new HashMap<String, BlockPlaceBean>();
+    static HashMap<String, BlockPlaceBean> chests = new HashMap<String, BlockPlaceBean>();
 
     private static BlockPlaceSingleton instance = null;
 
@@ -41,6 +44,7 @@ public class BlockPlaceSingleton {
             case        TORCH: torches.put(location, bean);   return false;
             case          WEB: webs.put(location, bean);      return false;
             case  MELON_BLOCK: melons.put(location, bean);    return false;
+            case        CHEST: chests.put(location, bean);    return false;
             default: return true;
         }
     }
@@ -51,34 +55,70 @@ public class BlockPlaceSingleton {
             case        TORCH: return torches;
             case          WEB: return webs;
             case  MELON_BLOCK: return melons;
+            case        CHEST: return chests;
             default: return null;
         }
     }
 
-    private static boolean isBlockInListOrRemove(Block block, boolean remove) {
+    public static boolean blockRemovedFromList(Block block) {
         HashMap<String, BlockPlaceBean> list = getList(block.getType());
         String location = StringUtils.getLocation(block.getLocation());
 
         if (list.containsKey(location)) {
-            if (remove) {
-                list.remove(location);
-            }
+            list.remove(location);
             return true;
         }
         return false;
     }
 
-    public static boolean isBlockInList(Block block) {
-        return isBlockInListOrRemove(block, false);
+    public static boolean canBreakBlock(Block block, Player player) {
+        switch(block.getType()) {
+            case STONE_BUTTON :
+                {
+                    if (blockRemovedFromList(block)) {
+                        block.setType(Material.AIR);
+                    }
+                    return false;
+                }
+
+            case MELON_BLOCK :
+                {
+                    if (player.getItemInHand().getType() == Material.WOOD_HOE) {
+                        blockRemovedFromList(block);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+            case TORCH :
+                {
+                    if (blockRemovedFromList(block)) {
+                        block.setType(Material.AIR);
+                    }
+                    return false;
+                }
+
+            case CHEST: {
+                {
+                    if (blockRemovedFromList(block)) {
+                        block.setType(Material.AIR);
+                    }
+                    return false;
+                }
+            }
+        }
+
+        return false;
     }
 
-    public static void removeIfApplicable(Block block) {
-        isBlockInListOrRemove(block, true);
-    }
-
-    public static void remove(Block block) {
+    public static boolean isPlayerPlacedBlock(Block block) {
+        String location = StringUtils.getLocation(block.getLocation());
         HashMap<String, BlockPlaceBean> list = getList(block.getType());
-        String toRemoveKey = StringUtils.getLocation(block.getLocation());
-        list.remove(toRemoveKey);
+        if (list != null) {
+            return list.containsKey(location);
+        }
+
+        return false;
     }
 }

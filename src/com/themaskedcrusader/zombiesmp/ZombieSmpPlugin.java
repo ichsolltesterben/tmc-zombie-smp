@@ -4,6 +4,9 @@ import com.themaskedcrusader.zombiesmp.listener.MobListener;
 import com.themaskedcrusader.zombiesmp.listener.PlayerListener;
 import com.themaskedcrusader.zombiesmp.listener.WorldControlListener;
 import com.themaskedcrusader.zombiesmp.schedule.BlockPlaceSchedule;
+import com.themaskedcrusader.zombiesmp.schedule.CustomChestSchedule;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ZombieSmpPlugin extends JavaPlugin {
@@ -23,6 +26,7 @@ public class ZombieSmpPlugin extends JavaPlugin {
 
     private void registerSchedules() {
         new BlockPlaceSchedule(this);
+//        new CustomChestSchedule(this);
     }
 
     public void onDisable() {
@@ -36,5 +40,19 @@ public class ZombieSmpPlugin extends JavaPlugin {
 
     public void setCurrentlySpawning(boolean currentlySpawning) {
         this.currentlySpawning = currentlySpawning;
+    }
+
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
+        if(cmd.getName().equalsIgnoreCase("respawnChests")){
+            CustomChestSchedule.reAddChestWithContents();
+            return true;
+        }
+
+        if(cmd.getName().equalsIgnoreCase("despawnChests")){
+            CustomChestSchedule.removeOpenedChests();
+            return true;
+        }
+
+        return false;
     }
 }

@@ -24,9 +24,10 @@ public class BlockPlaceSchedule {
 
     public static void cleanUpBlocks() {
         cleanUpBlocks(Material.STONE_BUTTON, 60000); // 60 seconds
-        cleanUpBlocks(Material.TORCH, 300000);       //  5 minutes
-        cleanUpBlocks(Material.WEB, 600000);         // 10 minutes
-        cleanUpBlocks(Material.MELON_BLOCK, 60000);  // 60 seconds
+        cleanUpBlocks(Material.TORCH,       300000); //  5 minutes
+        cleanUpBlocks(Material.WEB,         600000); // 10 minutes
+        cleanUpBlocks(Material.MELON_BLOCK,  60000); // 60 seconds
+        cleanUpBlocks(Material.CHEST,       600000); // 10 Minutes
     }
 
 
@@ -35,7 +36,7 @@ public class BlockPlaceSchedule {
         for (Map.Entry<String, BlockPlaceBean> block : BlockPlaceSingleton.getList(material).entrySet()) {
             BlockPlaceBean toRemove = block.getValue();
             if (date.getTime() - toRemove.getPlacedDate().getTime() > timeSpan) {
-                BlockPlaceSingleton.remove(toRemove.getBlock());
+                BlockPlaceSingleton.blockRemovedFromList(toRemove.getBlock());
                 removeBlock(toRemove);
             }
         }
@@ -52,5 +53,6 @@ public class BlockPlaceSchedule {
         cleanUpBlocks(Material.TORCH, 0);
         cleanUpBlocks(Material.WEB, 0);
         cleanUpBlocks(Material.MELON_BLOCK, 0);
+        cleanUpBlocks(Material.CHEST, 0);
     }
 }
