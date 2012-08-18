@@ -3,10 +3,13 @@ package com.themaskedcrusader.zombiesmp.schedule;
 import com.themaskedcrusader.zombiesmp.ZombieSmpPlugin;
 import com.themaskedcrusader.zombiesmp.beans.CustomChestBean;
 import com.themaskedcrusader.zombiesmp.singleton.ChestSingleton;
+import com.themaskedcrusader.zombiesmp.utility.WorldUtility;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -39,6 +42,12 @@ public class CustomChestSchedule {
         for (Map.Entry<String, CustomChestBean> toReAdd : ChestSingleton.getMapChests().entrySet()) {
             Block block = toReAdd.getValue().getBlock();
             if (block.getType() == Material.AIR) {
+                Collection<Entity> nearbyPlayers = WorldUtility.getNearbyPlayers(block.getLocation(), 10);
+                if (nearbyPlayers != null) {
+                    String message = ChatColor.RED + "Nearby chests are unable to respawn with you close by.";
+                    WorldUtility.sendBulkMessage(nearbyPlayers, message);
+                    return;
+                }
                 block.setType(Material.CHEST);
                 block.setData(toReAdd.getValue().getFacing());
                 Chest chest = (Chest) block.getState();

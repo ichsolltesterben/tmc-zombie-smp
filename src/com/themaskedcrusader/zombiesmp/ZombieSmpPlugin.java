@@ -26,7 +26,7 @@ public class ZombieSmpPlugin extends JavaPlugin {
 
     private void registerSchedules() {
         new BlockPlaceSchedule(this);
-//        new CustomChestSchedule(this);
+        new CustomChestSchedule(this);
     }
 
     public void onDisable() {
