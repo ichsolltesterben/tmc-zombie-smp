@@ -43,7 +43,7 @@ public class CustomChestSchedule {
             Block block = toReAdd.getValue().getBlock();
             if (block.getType() == Material.AIR) {
                 Collection<Entity> nearbyPlayers = WorldUtility.getNearbyPlayers(block.getLocation(), 10);
-                if (nearbyPlayers != null) {
+                if (nearbyPlayers.size() > 0) {
                     String message = ChatColor.RED + "Nearby chests are unable to respawn with you close by.";
                     WorldUtility.sendBulkMessage(nearbyPlayers, message);
                     return;
@@ -57,4 +57,6 @@ public class CustomChestSchedule {
             }
         }
     }
+
+
 }

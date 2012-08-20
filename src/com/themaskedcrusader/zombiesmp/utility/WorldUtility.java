@@ -1,6 +1,8 @@
 package com.themaskedcrusader.zombiesmp.utility;
 
+import com.themaskedcrusader.zombiesmp.entity.FasterZombie;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -21,6 +23,25 @@ public class WorldUtility {
             }
         }
         return toReturn;
+    }
+
+    public static Entity getNearestZombie(Location location) {
+        final Collection<org.bukkit.entity.Entity> worldEntities = location.getWorld().getEntities();
+
+        // a little intense, very sloppy and very inefficient, but necessary for now. Will clean up later
+        int r = 1;
+        while (r < 10) {
+            for (Entity entity : worldEntities) {
+                net.minecraft.server.Entity mcEntity = (((CraftEntity) entity).getHandle());
+                if (entity instanceof FasterZombie) {
+                    if (entity.getLocation().distance(location) < r) {
+                        return entity;
+                    }
+                }
+            }
+            r++;
+        }
+        return null;
     }
 
     public static void sendBulkMessage(Collection<Entity> nearbyPlayers, String message) {

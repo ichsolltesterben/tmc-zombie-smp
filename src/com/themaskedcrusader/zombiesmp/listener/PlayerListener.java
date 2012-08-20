@@ -1,14 +1,19 @@
 package com.themaskedcrusader.zombiesmp.listener;
 
 import com.themaskedcrusader.zombiesmp.ZombieSmpPlugin;
-import com.themaskedcrusader.zombiesmp.singleton.PlayerZombiesSingleton;
+import com.themaskedcrusader.zombiesmp.entity.FasterZombie;
+import com.themaskedcrusader.zombiesmp.singleton.ZombieSingleton;
+import com.themaskedcrusader.zombiesmp.utility.WorldUtility;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -37,11 +42,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void spawnZombieOnPlayerDeath(PlayerDeathEvent event) {
-        Player player = event.getEntity();
-        event.getDrops().clear();
-        Location location = player.getLocation();
-        Entity zombie = player.getWorld().spawnEntity(location, EntityType.ZOMBIE);
-        PlayerZombiesSingleton.getInstance().savePlayerZombie(zombie, player.getInventory());
+        // removed. Will re-add with new spawning algorithm
     }
 
     @EventHandler
@@ -55,9 +56,9 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void opIsInvincible(EntityDamageEvent event) {
-//        Entity entity = event.getEntity();
-//        if (entity instanceof Player) {
-//            event.setCancelled(((Player) entity).isOp());
-//        }
+        Entity entity = event.getEntity();
+        if (entity instanceof Player) {
+            event.setCancelled(((Player) entity).isOp());
+        }
     }
 }
