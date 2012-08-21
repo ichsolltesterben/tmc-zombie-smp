@@ -71,47 +71,6 @@ public class BlockPlaceSingleton {
         return false;
     }
 
-    public static boolean canBreakBlock(Block block, Player player) {
-        switch(block.getType()) {
-            case STONE_BUTTON :
-                {
-                    if (blockRemovedFromList(block)) {
-                        block.setType(Material.AIR);
-                    }
-                    return false;
-                }
-
-            case MELON_BLOCK :
-                {
-                    if (player.getItemInHand().getType() == Material.WOOD_HOE) {
-                        blockRemovedFromList(block);
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-
-            case TORCH :
-                {
-                    if (blockRemovedFromList(block)) {
-                        block.setType(Material.AIR);
-                    }
-                    return false;
-                }
-
-            case CHEST: {
-                {
-                    if (blockRemovedFromList(block)) {
-                        block.setType(Material.AIR);
-                    }
-                    return false;
-                }
-            }
-        }
-
-        return false;
-    }
-
     public static boolean isPlayerPlacedBlock(Block block) {
         String location = StringUtils.getLocation(block.getLocation());
         HashMap<String, BlockPlaceBean> list = getList(block.getType());

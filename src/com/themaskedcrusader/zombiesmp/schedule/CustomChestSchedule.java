@@ -3,6 +3,7 @@ package com.themaskedcrusader.zombiesmp.schedule;
 import com.themaskedcrusader.zombiesmp.ZombieSmpPlugin;
 import com.themaskedcrusader.zombiesmp.beans.CustomChestBean;
 import com.themaskedcrusader.zombiesmp.singleton.ChestSingleton;
+import com.themaskedcrusader.zombiesmp.utility.CustomChestUtility;
 import com.themaskedcrusader.zombiesmp.utility.WorldUtility;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -15,8 +16,10 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 public class CustomChestSchedule {
+    static ZombieSmpPlugin plugin;
 
     public CustomChestSchedule(ZombieSmpPlugin plugin) {
+        this.plugin = plugin;
         plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable() {
             public void run() {
                 CustomChestSchedule.removeOpenedChests();
@@ -39,6 +42,7 @@ public class CustomChestSchedule {
     }
 
     public static void reAddChestWithContents() {
+        CustomChestUtility utility = new CustomChestUtility(plugin);
         for (Map.Entry<String, CustomChestBean> toReAdd : ChestSingleton.getMapChests().entrySet()) {
             Block block = toReAdd.getValue().getBlock();
             if (block.getType() == Material.AIR) {
@@ -51,7 +55,7 @@ public class CustomChestSchedule {
                 block.setType(Material.CHEST);
                 block.setData(toReAdd.getValue().getFacing());
                 Chest chest = (Chest) block.getState();
-                ItemStack[] newInv = ChestSingleton.getNewInventory(-1, toReAdd.getValue().getContents());
+                ItemStack[] newInv = utility.getNewInventory(-1, toReAdd.getValue().getContents());
                 chest.getInventory().clear();
                 chest.getInventory().addItem(newInv);
             }

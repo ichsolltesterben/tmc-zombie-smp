@@ -7,17 +7,22 @@ import com.themaskedcrusader.zombiesmp.listener.WorldControlListener;
 import com.themaskedcrusader.zombiesmp.listener.ZombieListener;
 import com.themaskedcrusader.zombiesmp.schedule.BlockPlaceSchedule;
 import com.themaskedcrusader.zombiesmp.schedule.CustomChestSchedule;
+import com.themaskedcrusader.zombiesmp.schedule.PlayerThirstSchedule;
+import com.themaskedcrusader.zombiesmp.schedule.PlayerVisibilitySchedule;
 import com.themaskedcrusader.zombiesmp.utility.CommandUtility;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.lang.reflect.Method;
 
 public class ZombieSmpPlugin extends JavaPlugin {
     private boolean currentlySpawning = false;
 
     public void onEnable() {
+        loadConfiguration();
         registerListeners();
         registerSchedules();
         registerCommands();
@@ -35,10 +40,19 @@ public class ZombieSmpPlugin extends JavaPlugin {
     private void registerSchedules() {
         new BlockPlaceSchedule(this);
         new CustomChestSchedule(this);
+        new PlayerThirstSchedule(this);
+        new PlayerVisibilitySchedule(this);
     }
 
     private void registerCommands() {
         new CommandUtility(this);
+    }
+
+    private void loadConfiguration() {
+        String pluginFolder = this.getDataFolder().getAbsolutePath();
+        new File(pluginFolder).mkdirs();
+        getConfig().options().copyDefaults(true);
+        saveConfig();
     }
 
     private void registerNewZombies() {
@@ -52,6 +66,7 @@ public class ZombieSmpPlugin extends JavaPlugin {
             a.setAccessible(true);
 
             a.invoke(a, FasterZombie.class, "Zombie", 54);
+
         }catch (Exception e){
             e.printStackTrace();
             this.setEnabled(false);
@@ -76,5 +91,4 @@ public class ZombieSmpPlugin extends JavaPlugin {
         return CommandUtility.fireCommand(commandSender, command, s, strings);
 
     }
-
 }

@@ -1,5 +1,6 @@
 package com.themaskedcrusader.zombiesmp.singleton;
 
+import com.avaje.ebean.config.GlobalProperties;
 import com.themaskedcrusader.zombiesmp.entity.FasterZombie;
 import com.themaskedcrusader.zombiesmp.utility.StringUtils;
 import org.bukkit.Location;

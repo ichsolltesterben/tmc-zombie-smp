@@ -3,9 +3,6 @@ main: com.themaskedcrusader.zombiesmp.ZombieSmpPlugin
 version: 0.02a
 
 commands:
-   respawnchests:
-       description: triggers respawn of despawned chests
-       usage: /<command>
-   despawnchests:
-       description: triggers despawn of opened chests
-       usage: /<command>
+    tmcz:
+        description: Access to all tmcz commands
+        usage: /tmcz <command>

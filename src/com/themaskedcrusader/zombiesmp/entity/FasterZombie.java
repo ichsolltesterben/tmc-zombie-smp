@@ -12,20 +12,11 @@ public class FasterZombie extends net.minecraft.server.EntityZombie {
         this.bw = 0.23F;
 
         try {
-            //enable PathfinderGoalSelector's "a" field to be editable
             Field gsa = net.minecraft.server.PathfinderGoalSelector.class.getDeclaredField("a");
             gsa.setAccessible(true);
-
-            // ok now take this instances goals and targets and blank them
             gsa.set(this.goalSelector, new ArrayList());
             gsa.set(this.targetSelector, new ArrayList());
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
