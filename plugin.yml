@@ -1,8 +1,0 @@
-name: TMC Zombie SMP
-main: com.themaskedcrusader.zombiesmp.ZombieSmpPlugin
-version: 0.02a
-
-commands:
-    tmcz:
-        description: Access to all tmcz commands
-        usage: /tmcz <command>
